@@ -1,17 +1,20 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(pointgrey_camera_driver)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
+
 find_package(catkin REQUIRED COMPONENTS
   roscpp roslint nodelet sensor_msgs wfov_camera_msgs
   image_exposure_msgs camera_info_manager image_transport
-  dynamic_reconfigure diagnostic_updater)
+  dynamic_reconfigure diagnostic_updater camera_base)
 
 generate_dynamic_reconfigure_options(
   cfg/PointGrey.cfg
 )
 
 catkin_package(
-  CATKIN_DEPENDS roscpp nodelet
+  CATKIN_DEPENDS roscpp nodelet camera_base
 )
 
 # If the user has manually installed flycapture, use the system path version. If not,
@@ -31,7 +34,7 @@ endif()
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-add_library(PointGreyCamera src/PointGreyCamera.cpp)
+add_library(PointGreyCamera src/PointGreyCamera.cpp include/pointgrey_camera_driver/PointGreyCamera_ros.h src/PointGreyCamera_ros.cpp)
 target_link_libraries(PointGreyCamera ${POINTGREY_LIB} ${catkin_LIBRARIES})
 add_dependencies(PointGreyCamera ${PROJECT_NAME}_gencfg) 
 
