@@ -173,6 +173,8 @@ public:
 
   uint getROIPosition();
 
+  bool IsConnected() { return cam_.IsConnected(); }
+
 private:
 
   uint32_t serial_; ///< A variable to hold the serial number of the desired camera.
