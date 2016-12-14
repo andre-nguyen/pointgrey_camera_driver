@@ -36,6 +36,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include <sensor_msgs/image_encodings.h> // ROS header for the different supported image encoding types
 #include <sensor_msgs/fill_image.h>
 #include <pointgrey_camera_driver/camera_exceptions.h>
+#include <trigger_sync/trigger_sync.h>
 
 #include <sstream>
 
@@ -185,6 +186,8 @@ private:
 
   /// If true, camera is currently running in color mode, otherwise camera is running in mono mode
   bool isColor_;
+
+  TriggerSync* ts_;
 
   // For GigE cameras:
   /// If true, GigE packet size is automatically determined, otherwise packet_size_ is used:

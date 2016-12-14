@@ -41,6 +41,7 @@ PointGreyCamera::PointGreyCamera():
 {
   serial_ = 0;
   captureRunning_ = false;
+  ts_ = new TriggerSync("camera", "local");
 }
 
 PointGreyCamera::~PointGreyCamera()
@@ -939,8 +940,10 @@ void PointGreyCamera::grabImage(sensor_msgs::Image &image, const std::string &fr
 
     // Set header timestamp as embedded for now
     TimeStamp embeddedTime = rawImage.GetTimeStamp();
-    image.header.stamp.sec = embeddedTime.seconds;
-    image.header.stamp.nsec = 1000 * embeddedTime.microSeconds;
+    ros::Time deviceTime(embeddedTime.seconds, embeddedTime.microSeconds * 1000);
+    image.header.stamp = ts_->update(deviceTime, ros::Time::now());
+    // image.header.stamp.sec = embeddedTime.seconds;
+    // image.header.stamp.nsec = 1000 * embeddedTime.microSeconds;
 
     // Check the bits per pixel.
     uint8_t bitsPerPixel = rawImage.GetBitsPerPixel();
